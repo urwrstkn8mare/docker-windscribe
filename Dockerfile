@@ -2,17 +2,6 @@
 # Based on Ubuntu 20.04 LTS
 FROM ubuntu:20.04
 
-# Build arguments
-ARG BUILD_DATE
-ARG VCS_REF
-ARG VERSION=0.0.12
-
-# Labels
-LABEL com.wiorca.build-date=$BUILD_DATE \
-      com.wiorca.vcs-url="https://github.com/wiorca/docker-windscribe.git" \
-      com.wiorca.vcs-ref=$VCS_REF \
-      com.wiorca.schema-version=$VERSION
-
 # The volume for the docker_user home directory, and where configuration files should be stored.
 VOLUME [ "/config" ]
 
@@ -25,10 +14,11 @@ ENV DEBIAN_FRONTEND=noninteractive \
     WINDSCRIBE_PASSWORD=password \
     WINDSCRIBE_PROTOCOL=stealth \
     WINDSCRIBE_PORT=80 \
-    WINDSCRIBE_PORT_FORWARD=9999 \
     WINDSCRIBE_LOCATION=US \
     WINDSCRIBE_LANBYPASS=on \
-    WINDSCRIBE_FIREWALL=on
+    WINDSCRIBE_FIREWALL=on \
+    DNS1=1.1.1.1 \
+    DNS2=1.0.0.1
 
 # Update ubuntu container, and install the basics, Add windscribe ppa, Install windscribe, and some to be removed utilities
 RUN apt -y update && apt -y dist-upgrade && apt install -y gnupg apt-utils ca-certificates expect iptables iputils-ping && \
@@ -47,7 +37,7 @@ ADD scripts /opt/scripts/
 
 # Enable the health check for the VPN and app
 HEALTHCHECK --interval=5m --timeout=60s \
-  CMD /opt/scripts/health-check.sh || exit 1
+  CMD /opt/scripts/vpn-health-check.sh || exit 1
 
 # Run the container
 CMD [ "/bin/bash", "/opt/scripts/vpn-startup.sh" ]
