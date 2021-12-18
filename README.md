@@ -1,5 +1,7 @@
 # Docker Windscribe Image
 
+*TODO: Polish repo and document*
+
 ## About the image
 
 Windscribe docker container, as a base for other images.  It does not forward any ports, has onely one volume for the docker_user, and exits immediately by default.
@@ -7,22 +9,6 @@ Windscribe docker container, as a base for other images.  It does not forward an
 It contains health-checking, and a framework for extending the image however you like to serve your own purposes.  It just handles connecting to windscribe for the moment, and making sure the connection remains active and secure.
 
 This documentation format is inspired by the great people over at linuxserver.io.
-
-## Extending the image
-
-There are three script files placed in the /opt/scripts directory that are designed to be overwritten:
-
-/opt/scripts/app-setup.sh
-
-This script is designed to set up the environment for the running application. It is run as root, and should be used to prepare the environment for the running app.
-
-/opt/scripts/app-startup.sh
-
-This script is designed to start the user application after the connection to the VPN has been established.  This script should never exit, and will be run as docker_user:docker_group, with the UID and GID specified in PUID and GUID.
-
-/opt/scripts/app-health-check.sh
-
-This script will be run periodically to check the health of the container.  It MUST return 0 if the container is healthy.  Any other return value will fail.  It is called after the health check for the VPN is completed successfully.  Override as you wish.
 
 ## Usage
 

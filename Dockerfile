@@ -32,3 +32,7 @@ HEALTHCHECK --interval=5m --timeout=60s \
 
 # Run the container
 CMD [ "/bin/bash", "/opt/scripts/vpn-startup.sh" ]
+
+# Info
+
+LABEL org.opencontainers.image.source = "https://github.com/urwrstkn8mare/docker-windscribe/tree/gateway"
