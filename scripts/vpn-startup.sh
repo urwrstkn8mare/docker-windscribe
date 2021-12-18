@@ -71,3 +71,5 @@ while [[ ! $? -eq 0 ]]; do
     /opt/scripts/vpn-health-check.expect
 done
 
+# Keep the container running as long as the user wants
+trap : TERM INT; sleep infinity & wait
