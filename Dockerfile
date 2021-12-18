@@ -2,9 +2,6 @@
 # Based on Ubuntu 20.04 LTS
 FROM ubuntu:20.04
 
-# The volume for the docker_user home directory, and where configuration files should be stored.
-VOLUME [ "/config" ]
-
 # Some environment variables
 ENV DEBIAN_FRONTEND=noninteractive \
     TZ=America/Toronto \
@@ -12,13 +9,11 @@ ENV DEBIAN_FRONTEND=noninteractive \
     PGID=1000 \
     WINDSCRIBE_USERNAME=username \
     WINDSCRIBE_PASSWORD=password \
-    WINDSCRIBE_PROTOCOL=stealth \
+    WINDSCRIBE_PROTOCOL=UDP \
     WINDSCRIBE_PORT=80 \
-    WINDSCRIBE_LOCATION=US \
+    WINDSCRIBE_LOCATION=best \
     WINDSCRIBE_LANBYPASS=on \
-    WINDSCRIBE_FIREWALL=on \
-    DNS1=1.1.1.1 \
-    DNS2=1.0.0.1
+    WINDSCRIBE_FIREWALL=on
 
 # Update ubuntu container, and install the basics, Add windscribe ppa, Install windscribe, and some to be removed utilities
 RUN apt -y update && apt -y dist-upgrade && apt install -y gnupg apt-utils ca-certificates expect iptables iputils-ping && \
@@ -27,10 +22,6 @@ RUN apt -y update && apt -y dist-upgrade && apt install -y gnupg apt-utils ca-ce
      apt -y update && apt -y dist-upgrade && apt install -y windscribe-cli && \
      apt install -y curl net-tools iputils-tracepath && \
      apt -y autoremove && apt -y clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-
-# Add in the docker user
-RUN groupadd -r docker_group  && useradd -r -d /config -g docker_group docker_user
 
 # Add in scripts for health check and start-up
 ADD scripts /opt/scripts/
