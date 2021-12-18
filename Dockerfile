@@ -28,10 +28,10 @@ ADD scripts /opt/scripts/
 
 # Enable the health check for the VPN and app
 HEALTHCHECK --interval=5m --timeout=60s \
-  CMD /opt/scripts/vpn-health-check.sh || exit 1
+  CMD /opt/scripts/health-check.sh || exit 1
 
 # Run the container
-CMD [ "/bin/bash", "/opt/scripts/vpn-startup.sh" ]
+CMD [ "/bin/bash", "/opt/scripts/startup.sh" ]
 
 # Info
 

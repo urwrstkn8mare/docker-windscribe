@@ -16,31 +16,31 @@ fi
 
 # Log in, and configure the service
 
-/opt/scripts/vpn-login.expect
+/opt/scripts/login.expect
 
 if [ ! $? -eq 0 ]; then
     exit 5;
 fi
 
-/opt/scripts/vpn-lanbypass.expect
+/opt/scripts/lanbypass.expect
 
 if [ ! $? -eq 0 ]; then
     exit 5;
 fi
 
-/opt/scripts/vpn-protocol.expect
+/opt/scripts/protocol.expect
 
 if [ ! $? -eq 0 ]; then
     exit 5;
 fi
 
-/opt/scripts/vpn-port.expect
+/opt/scripts/port.expect
 
 if [ ! $? -eq 0 ]; then
     exit 5;
 fi
 
-/opt/scripts/vpn-firewall.expect
+/opt/scripts/firewall.expect
 
 if [ ! $? -eq 0 ]; then
     exit 5;
@@ -51,7 +51,7 @@ echo "nameserver 10.255.255.1" >> /etc/resolv.conf
 
 # Connect to the VPN
 
-/opt/scripts/vpn-connect.expect
+/opt/scripts/connect.expect
 
 if [ ! $? -eq 0 ]; then
     exit 5;
@@ -60,7 +60,7 @@ fi
 # Wait for the connection to come up
 
 i="0"
-/opt/scripts/vpn-health-check.expect
+/opt/scripts/health-check.expect
 while [[ ! $? -eq 0 ]]; do
     sleep 2
     echo "Waiting for the VPN to connect... $i"
@@ -68,7 +68,7 @@ while [[ ! $? -eq 0 ]]; do
     if [[ $i -eq "10" ]]; then
         exit 5
     fi
-    /opt/scripts/vpn-health-check.expect
+    /opt/scripts/health-check.expect
 done
 
 # Keep the container running as long as the user wants
